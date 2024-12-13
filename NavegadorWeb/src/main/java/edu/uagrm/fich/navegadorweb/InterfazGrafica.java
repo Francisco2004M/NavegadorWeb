@@ -19,13 +19,13 @@ import javafx.scene.web.WebView;
  */
 public class InterfazGrafica extends VBox {
 
-    private TextField txtBuscador = new TextField();
-    private Button btnBuscar = new Button("Buscar");
-    private Button btnAtras = new Button();
-    private Button btnAdelante = new Button();
-    private HBox boxBuscar = new HBox(5, txtBuscador, btnBuscar, btnAtras, btnAdelante);
+    private final TextField txtBuscador = new TextField();
+    private final Button btnBuscar = new Button("Buscar");
+    private final Button btnAtras = new Button();
+    private final Button btnAdelante = new Button();
+    private final HBox boxBuscar = new HBox(5, txtBuscador, btnBuscar, btnAtras, btnAdelante);
 
-    private WebView webView = new WebView();
+    private final WebView webView = new WebView();
     WebEngine webEngine = webView.getEngine();
 
     public InterfazGrafica() {
