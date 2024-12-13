@@ -27,7 +27,7 @@ public class InterfazGrafica extends VBox {
     private final Button btnHistorial = new Button();
     private final HBox boxBuscar = new HBox(5, txtBuscador, btnBuscar, btnAtras, btnAdelante, btnHistorial);
     private final Historial historial;
- 
+
     private final WebView webView = new WebView();
     WebEngine webEngine = webView.getEngine();
 
@@ -37,6 +37,7 @@ public class InterfazGrafica extends VBox {
         getChildren().addAll(boxBuscar, webView);
         configurarPresentacion();
         configurarAcciones();
+        refrescarBotonesDeNavegacion();
     }
 
     private void configurarPresentacion() {
@@ -79,15 +80,25 @@ public class InterfazGrafica extends VBox {
     private void buscar(String consulta) {
         if (consulta.toLowerCase().contains("http") || consulta.toLowerCase().contains("ftp")) {
             webEngine.load(consulta);
-            historial.agregarBusqueda(consulta);
+            actualizarHistorial(consulta);
         } else {
             var busqueda = "https://www.google.com/search?q=" + consulta.replace(" ", "+");
             webEngine.load(busqueda);
-            historial.agregarBusqueda(busqueda);
+            actualizarHistorial(busqueda);
         }
     }
-   
-    public void mostrarDialogoHistorial(EventHandler evt){
+
+    public void mostrarDialogoHistorial(EventHandler evt) {
         btnHistorial.setOnAction(evt);
+    }
+
+    public void actualizarHistorial(String pagina) {
+        historial.agregarBusqueda(pagina);
+        refrescarBotonesDeNavegacion();
+    }
+
+    private void refrescarBotonesDeNavegacion() {
+        btnAdelante.setDisable(historial.adelante() == null);
+        btnAtras.setDisable(historial.atras() == null);
     }
 }
