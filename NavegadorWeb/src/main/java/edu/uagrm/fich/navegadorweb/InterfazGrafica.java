@@ -6,9 +6,11 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
 /**
@@ -24,11 +26,13 @@ public class InterfazGrafica extends VBox {
     private HBox boxBuscar = new HBox(5, txtBuscador, btnBuscar, btnAtras, btnAdelante);
 
     private WebView webView = new WebView();
+    WebEngine webEngine = webView.getEngine();
 
     public InterfazGrafica() {
         super(10);
         getChildren().addAll(boxBuscar, webView);
         configurarPresentacion();
+        configurarAcciones();
     }
 
     private void configurarPresentacion() {
@@ -53,5 +57,22 @@ public class InterfazGrafica extends VBox {
         btnAtras.setTooltip(new Tooltip("Ir a la página anterior en el Historial"));
         btnAdelante.setGraphic(adelanteIcon);
         btnAdelante.setTooltip(new Tooltip("Ir a la siguiente Página en el Historial"));
+    }
+
+    private void configurarAcciones() {
+        btnBuscar.setOnAction((evt) -> buscar(txtBuscador.getText()));
+        txtBuscador.setOnKeyPressed(evt -> {
+            if (evt.getCode() == KeyCode.ENTER) {
+                buscar(txtBuscador.getText());
+            }
+        });
+    }
+
+    private void buscar(String consulta) {
+        if (consulta.toLowerCase().contains("http") || consulta.toLowerCase().contains("ftp")) {
+            webEngine.load(consulta.replace(" ", "+"));
+        } else {
+            webEngine.load("https://www.google.com/search?q=" + consulta);
+        }
     }
 }
