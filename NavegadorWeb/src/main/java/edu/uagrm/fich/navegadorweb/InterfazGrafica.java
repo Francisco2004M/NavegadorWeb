@@ -2,6 +2,7 @@ package edu.uagrm.fich.navegadorweb;
 
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -23,8 +24,9 @@ public class InterfazGrafica extends VBox {
     private final Button btnBuscar = new Button("Buscar");
     private final Button btnAtras = new Button();
     private final Button btnAdelante = new Button();
-    private final HBox boxBuscar = new HBox(5, txtBuscador, btnBuscar, btnAtras, btnAdelante);
-
+    private final Button btnHistorial = new Button();
+    private final HBox boxBuscar = new HBox(5, txtBuscador, btnBuscar, btnAtras, btnAdelante, btnHistorial);
+ 
     private final WebView webView = new WebView();
     WebEngine webEngine = webView.getEngine();
 
@@ -46,10 +48,12 @@ public class InterfazGrafica extends VBox {
         FontAwesomeIconView buscarIcon = new FontAwesomeIconView(FontAwesomeIcon.SEARCH);
         FontAwesomeIconView atrasIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_LEFT);
         FontAwesomeIconView adelanteIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_RIGHT);
+        FontAwesomeIconView historialIcon = new FontAwesomeIconView(FontAwesomeIcon.HISTORY);
 
         buscarIcon.setSize("16px");
         atrasIcon.setSize("16px");
         adelanteIcon.setSize("16px");
+        historialIcon.setSize("16px");
 
         btnBuscar.setGraphic(buscarIcon);
         btnBuscar.setTooltip(new Tooltip("Buscar página indicada en la barra de busqueda"));
@@ -57,6 +61,8 @@ public class InterfazGrafica extends VBox {
         btnAtras.setTooltip(new Tooltip("Ir a la página anterior en el Historial"));
         btnAdelante.setGraphic(adelanteIcon);
         btnAdelante.setTooltip(new Tooltip("Ir a la siguiente Página en el Historial"));
+        btnHistorial.setGraphic(historialIcon);
+        btnHistorial.setTooltip(new Tooltip("Mostrar Historial de Navegación"));
     }
 
     private void configurarAcciones() {
@@ -74,5 +80,9 @@ public class InterfazGrafica extends VBox {
         } else {
             webEngine.load("https://www.google.com/search?q=" + consulta);
         }
+    }
+   
+    public void mostrarDialogoHistorial(EventHandler evt){
+        btnHistorial.setOnAction(evt);
     }
 }
