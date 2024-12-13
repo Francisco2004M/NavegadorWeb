@@ -21,7 +21,7 @@ public final class Historial {
         cargarHistorial();
     }
 
-    public void Buscar(String url) {
+    public void agregarBusqueda(String url) {
         if (actualURL != null) {
             historialAtras.push(actualURL);
         }

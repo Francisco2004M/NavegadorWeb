@@ -26,12 +26,14 @@ public class InterfazGrafica extends VBox {
     private final Button btnAdelante = new Button();
     private final Button btnHistorial = new Button();
     private final HBox boxBuscar = new HBox(5, txtBuscador, btnBuscar, btnAtras, btnAdelante, btnHistorial);
+    private final Historial historial;
  
     private final WebView webView = new WebView();
     WebEngine webEngine = webView.getEngine();
 
-    public InterfazGrafica() {
+    public InterfazGrafica(Historial historial) {
         super(10);
+        this.historial = historial;
         getChildren().addAll(boxBuscar, webView);
         configurarPresentacion();
         configurarAcciones();
@@ -76,9 +78,12 @@ public class InterfazGrafica extends VBox {
 
     private void buscar(String consulta) {
         if (consulta.toLowerCase().contains("http") || consulta.toLowerCase().contains("ftp")) {
-            webEngine.load(consulta.replace(" ", "+"));
+            webEngine.load(consulta);
+            historial.agregarBusqueda(consulta);
         } else {
-            webEngine.load("https://www.google.com/search?q=" + consulta);
+            var busqueda = "https://www.google.com/search?q=" + consulta.replace(" ", "+");
+            webEngine.load(busqueda);
+            historial.agregarBusqueda(busqueda);
         }
     }
    
