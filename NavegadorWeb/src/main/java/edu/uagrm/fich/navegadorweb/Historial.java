@@ -33,6 +33,14 @@ public final class Historial {
     public List<String> obtenerHistorialCompleto() {
         return historialCompleto;
     }
+    
+    public boolean hayAtras(){
+        return !historialAtras.vacia();
+    }
+    
+    public boolean hayAdelante(){
+        return !historialAdelante.vacia();
+    }
 
     public String atras() {
         if (!historialAtras.vacia()) {

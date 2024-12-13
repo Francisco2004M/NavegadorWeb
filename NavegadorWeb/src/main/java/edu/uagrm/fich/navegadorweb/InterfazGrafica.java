@@ -100,19 +100,21 @@ public class InterfazGrafica extends VBox {
     }
     
     private void refrescarBotonesDeNavegacion() {
-        btnAdelante.setDisable(historial.adelante() == null);
-        btnAtras.setDisable(historial.atras() == null);
+        btnAdelante.setDisable(!historial.hayAdelante());
+        btnAtras.setDisable(!historial.hayAtras());
     }
     
     private void clickEnAdelante() {
         String urlAdelante = historial.adelante();
         webEngine.load(urlAdelante);
+        txtBuscador.setText(urlAdelante);
         refrescarBotonesDeNavegacion();
     }
     
     private void clickEnAtras() {
         String urlAtras = historial.atras();
         webEngine.load(urlAtras);
+        txtBuscador.setText(urlAtras);
         refrescarBotonesDeNavegacion();
     }
 }
