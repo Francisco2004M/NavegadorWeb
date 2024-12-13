@@ -19,7 +19,7 @@ import javafx.scene.web.WebView;
  * @author Francisco
  */
 public class InterfazGrafica extends VBox {
-
+    
     private final TextField txtBuscador = new TextField();
     private final Button btnBuscar = new Button("Buscar");
     private final Button btnAtras = new Button();
@@ -27,10 +27,10 @@ public class InterfazGrafica extends VBox {
     private final Button btnHistorial = new Button();
     private final HBox boxBuscar = new HBox(5, txtBuscador, btnBuscar, btnAtras, btnAdelante, btnHistorial);
     private final Historial historial;
-
+    
     private final WebView webView = new WebView();
     WebEngine webEngine = webView.getEngine();
-
+    
     public InterfazGrafica(Historial historial) {
         super(10);
         this.historial = historial;
@@ -39,25 +39,25 @@ public class InterfazGrafica extends VBox {
         configurarAcciones();
         refrescarBotonesDeNavegacion();
     }
-
+    
     private void configurarPresentacion() {
         setPadding(new Insets(15));
         txtBuscador.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(txtBuscador, Priority.ALWAYS);
         agregarIconos();
     }
-
+    
     private void agregarIconos() {
         FontAwesomeIconView buscarIcon = new FontAwesomeIconView(FontAwesomeIcon.SEARCH);
         FontAwesomeIconView atrasIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_LEFT);
         FontAwesomeIconView adelanteIcon = new FontAwesomeIconView(FontAwesomeIcon.ARROW_RIGHT);
         FontAwesomeIconView historialIcon = new FontAwesomeIconView(FontAwesomeIcon.HISTORY);
-
+        
         buscarIcon.setSize("16px");
         atrasIcon.setSize("16px");
         adelanteIcon.setSize("16px");
         historialIcon.setSize("16px");
-
+        
         btnBuscar.setGraphic(buscarIcon);
         btnBuscar.setTooltip(new Tooltip("Buscar página indicada en la barra de busqueda"));
         btnAtras.setGraphic(atrasIcon);
@@ -67,7 +67,7 @@ public class InterfazGrafica extends VBox {
         btnHistorial.setGraphic(historialIcon);
         btnHistorial.setTooltip(new Tooltip("Mostrar Historial de Navegación"));
     }
-
+    
     private void configurarAcciones() {
         btnBuscar.setOnAction((evt) -> buscar(txtBuscador.getText()));
         txtBuscador.setOnKeyPressed(evt -> {
@@ -75,8 +75,10 @@ public class InterfazGrafica extends VBox {
                 buscar(txtBuscador.getText());
             }
         });
+        btnAtras.setOnAction(evt -> clickEnAtras());
+        btnAdelante.setOnAction(evt -> clickEnAdelante());
     }
-
+    
     private void buscar(String consulta) {
         if (consulta.toLowerCase().contains("http") || consulta.toLowerCase().contains("ftp")) {
             webEngine.load(consulta);
@@ -87,18 +89,30 @@ public class InterfazGrafica extends VBox {
             actualizarHistorial(busqueda);
         }
     }
-
+    
     public void mostrarDialogoHistorial(EventHandler evt) {
         btnHistorial.setOnAction(evt);
     }
-
+    
     public void actualizarHistorial(String pagina) {
         historial.agregarBusqueda(pagina);
         refrescarBotonesDeNavegacion();
     }
-
+    
     private void refrescarBotonesDeNavegacion() {
         btnAdelante.setDisable(historial.adelante() == null);
         btnAtras.setDisable(historial.atras() == null);
+    }
+    
+    private void clickEnAdelante() {
+        String urlAdelante = historial.adelante();
+        webEngine.load(urlAdelante);
+        refrescarBotonesDeNavegacion();
+    }
+    
+    private void clickEnAtras() {
+        String urlAtras = historial.atras();
+        webEngine.load(urlAtras);
+        refrescarBotonesDeNavegacion();
     }
 }
